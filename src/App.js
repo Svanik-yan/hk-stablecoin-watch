@@ -382,7 +382,8 @@ const HKStablecoinWatch = () => {
   const currentData = data[selectedCoin];
   const healthStatus = getHealthStatus(currentData.collateralizationRatio);
 
-  if (Object.values(data).every(coin => coin.loading)) {
+  // 只有在所有数据都在加载且没有任何数据时才显示全屏加载
+  if (Object.values(data).every(coin => coin.loading && coin.supply === 0)) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center p-8">
@@ -569,7 +570,14 @@ const HKStablecoinWatch = () => {
                   <div className="text-right">
                     <h3 className="text-sm font-medium text-slate-600 mb-1">{t.totalSupply}</h3>
                     <div className="text-3xl font-bold text-slate-900">
-                      ${formatNumber(currentData.supply)}
+                      {currentData.loading || currentData.supply === 0 ? (
+                        <div className="flex items-center space-x-2">
+                          <RefreshCw className="w-6 h-6 animate-spin text-blue-500" />
+                          <span className="text-slate-400">加载中...</span>
+                        </div>
+                      ) : (
+                        `$${formatNumber(currentData.supply)}`
+                      )}
                     </div>
                   </div>
                 </div>
@@ -598,7 +606,14 @@ const HKStablecoinWatch = () => {
                   <div className="text-right">
                     <h3 className="text-sm font-medium text-slate-600 mb-1">{t.disclosedReserves}</h3>
                     <div className="text-3xl font-bold text-slate-900">
-                      ${formatNumber(currentData.reserves)}
+                      {currentData.loading || currentData.reserves === 0 ? (
+                        <div className="flex items-center space-x-2">
+                          <RefreshCw className="w-6 h-6 animate-spin text-emerald-500" />
+                          <span className="text-slate-400">加载中...</span>
+                        </div>
+                      ) : (
+                        `$${formatNumber(currentData.reserves)}`
+                      )}
                     </div>
                   </div>
                 </div>
@@ -624,14 +639,21 @@ const HKStablecoinWatch = () => {
                   </div>
                   <div className="text-right">
                     <h3 className="text-sm font-medium text-slate-600 mb-1">{t.collateralizationRatio}</h3>
-                    <div className={`text-4xl font-bold ${healthStatus.color}`}>
-                      {currentData.collateralizationRatio.toFixed(2)}%
+                    <div className={`text-4xl font-bold ${currentData.loading || currentData.collateralizationRatio === 0 ? 'text-slate-400' : healthStatus.color}`}>
+                      {currentData.loading || currentData.collateralizationRatio === 0 ? (
+                        <div className="flex items-center space-x-2">
+                          <RefreshCw className="w-6 h-6 animate-spin text-slate-500" />
+                          <span className="text-2xl">加载中...</span>
+                        </div>
+                      ) : (
+                        `${currentData.collateralizationRatio.toFixed(2)}%`
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="border-t border-slate-100 pt-4">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${healthStatus.badge}`}>
-                    {healthStatus.text}
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${currentData.loading || currentData.collateralizationRatio === 0 ? 'bg-slate-100 text-slate-600' : healthStatus.badge}`}>
+                    {currentData.loading || currentData.collateralizationRatio === 0 ? '数据加载中' : healthStatus.text}
                   </span>
                 </div>
               </div>
