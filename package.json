@@ -60,5 +60,9 @@
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@stagewise-plugins/react": "^0.4.9",
+    "@stagewise/toolbar-react": "^0.4.9"
   }
 }

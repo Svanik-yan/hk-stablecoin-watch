@@ -16,6 +16,8 @@ import {
   BarChart3, 
   Settings 
 } from 'lucide-react';
+import { StagewiseToolbar } from '@stagewise/toolbar-react';
+import { ReactPlugin } from '@stagewise-plugins/react';
 
 const HKStablecoinWatch = () => {
   const [selectedCoin, setSelectedCoin] = useState('TUSD');
@@ -399,6 +401,13 @@ const HKStablecoinWatch = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Stagewise Toolbar - Only shows in development mode */}
+      <StagewiseToolbar 
+        config={{
+          plugins: [ReactPlugin]
+        }}
+      />
+      
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/60 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
